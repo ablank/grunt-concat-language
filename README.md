@@ -30,13 +30,13 @@ Task targets, files and options may be specified according to the Grunt [Configu
 ### Options
 
 #### separator
-Type: `String`
+Type: `String`  
 Default: `grunt.util.linefeed`
 
 Concatenated files will be joined on this string. If you're post-processing concatenated JavaScript files with a minifier, you may need to use a semicolon `';'` as the separator.
 
 #### banner
-Type: `String`
+Type: `String`  
 Default: empty string
 
 This string will be prepended to the beginning of the concatenated output. It is processed using [grunt.template.process][], using the default options.
@@ -44,14 +44,14 @@ This string will be prepended to the beginning of the concatenated output. It is
 _(Default processing options are explained in the [grunt.template.process][] documentation)_
 
 #### footer
-Type: `String`
+Type: `String`  
 Default: empty string
 
 This string will be appended to the end of the concatenated output. It is processed using [grunt.template.process][], using the default options.
 
 _(Default processing options are explained in the [grunt.template.process][] documentation)_
 
-#### stripBanners
+#### stripBanners  
 Type: `Boolean` `Object`
 Default: `false`
 
@@ -65,7 +65,7 @@ Strip JavaScript banner comments from source files.
   * `line` - If true, any contiguous _leading_ `//` line comments are stripped.
 
 #### process
-Type: `Boolean` `Object` `Function`
+Type: `Boolean` `Object` `Function`  
 Default: `false`
 
 Process source files before concatenating, either as [templates][] or with a custom function.
@@ -80,93 +80,110 @@ _(Default processing options are explained in the [grunt.template.process][] doc
   [templates]: https://github.com/gruntjs/grunt-docs/blob/master/grunt.template.md
   [grunt.template.process]: https://github.com/gruntjs/grunt-docs/blob/master/grunt.template.md#grunttemplateprocess
 
+### *SourceMap Options*
+
 #### sourceMap
-Type: `Boolean`
+Type: `Boolean`  
 Default: `false`
 
 Set to true to create a source map. The source map will be created alongside the destination file, and share the same file name with the `.map` extension appended to it.
 
 #### sourceMapName
-Type: `String` `Function`
+Type: `String` `Function`  
 Default: `undefined`
 
 To customize the name or location of the generated source map, pass a string to indicate where to write the source map to. If a function is provided, the concat destination is passed as the argument and the return value will be used as the file name.
 
 #### sourceMapStyle
-Type: `String`
+Type: `String`  
 Default: `embed`
 
 Determines the type of source map that is generated. The default value, `embed`, places the content of the sources directly into the map. `link` will reference the original sources in the map as links. `inline` will store the entire map as a data URI in the destination file.
 
+### *Language Options*
 #### language
-Type: `Object`
+Type: `Boolean` `Object`  
 Default: `false`
 
-Wrapper object for language options.
+Wrapper object for language options. 
+
+Build php, html, or other file types that require opening/closing tags by specifying a language type. This module may be used to strip multiple line breaks & spaces from any file, and will provide basic opening/closing tags to format documents compiled of the type html, php, or xml.
+
+#### language.opentag
+Type: `String`  
+Default: empty string
+
+Tag used to open document (before banner).
+
+#### language.closetag
+Type: `String`  
+Default: empty string
+
+Tag used to close document.
 
 #### language.rmLine
+Type: `Boolean`  
+Default: null
+
+Remove empty lines > 1
 
 #### language.rmSpace
+Type: `Boolean`  
+Default: null
+
+Remove spaces > 1
 
 #### language.type
+Type: `String`  
+Default: null
 
+Define language type: the type is used to search & replace tags specific to the selected language. Opening and closing tags will be added with the option to override default values.
 
-#### rmLine
+* `html` - Combines the content found in `<body></body>` tags, with the option to remove all `<script></script>` by setting `language.rmScript: true`
 
+* `php` - Combine php documents, removes the opening and closing `<?php ?>` tags 
 
-```js
-    js: {
-    options: {
-      language: {
-        rmLine: true,
-        rmSpace: true
-      }
-      }
-    }.
-    php: {
-    options: {
-      language: {
-        type: 'php',
-        rmSpace: true,
-        rmLine: true,
-        rmClose: true
-      }
-    },
-    src: [
-      'preprocess/theme-settings/markup.inc',
-      'preprocess/theme-settings/style.inc',
-      'preprocess/theme-settings/js.inc',
-    ],
-    dest: 'theme-settings.php'
-  },
-  html: {
-    options: {
-      language: {
-        type: 'html',
-        rmScript: true
-      }
-    },
-    src: ['process/html/**/*.html'],
-    dest: 'processed.html'
-  },
-  xml: {
-    options: {
-      language: {
-        type: 'xml',
-        version: '1.0',
-        standalone: 'no',
-      }
-    },
-    src: ['process/xml/**/*.xml'],
-    dest: 'processed.xml'
-  }
-});
-```
+* `xml` - Combine xml documents, stripping the declaration and doctype.
+
+#### language.doctype
+Type: `String`  
+Default: `<!DOCTYPE html>`, `[]`
+
+Doctype declaration of language.type `html` & `xml`. In XML files, this attribute sets the correct SYSTEM & `standalone` attributes automatically.
+
+#### language.rmScript
+Type: `Boolean`  
+Default: null
+
+Remove `<script>...</script>` from `language.type html`
+
+#### language.rmClose
+Type: `Boolean`  
+Default: `true`
+
+Remove the closing `?>` from `language.type: php`
+
+#### language.version
+Type: `String`  
+Default: `1.0`
+
+Version number of `language.type: xml`
+
+#### language.encoding
+Type: `String`  
+Default: `UTF-8`
+
+Encoding of language.type `xml`
+
+#### language.docroot
+Type: `String`  
+Default: `document`
+
+Root element used by language.type `xml`
 
 ### Usage Examples
 
 #### Concatenating with a custom separator
-
 In this example, running `grunt concat:dist` (or `grunt concat` because `concat` is a [multi task][multitask]) will concatenate the three specified source files (in order), joining files with `;` and writing the output to `dist/built.js`.
 
 ```js
@@ -297,6 +314,68 @@ grunt.initConfig({
       dest: '<%= dirs.dest %>/with_extras.js',
     },
   },
+});
+```
+
+#### Working with Multiple Languages
+
+This example shows the language options available to format compiled documents and demonstrates how to combine files ordered by an array or sequentially from a specified directory.
+
+```js
+// Project configuration.
+grunt.initConfig({
+  php: {
+    options: {
+      language: {
+      // rmClose is specific to type php
+        type: 'php',
+        rmClose: true
+      }
+    },
+    src: [
+      'preprocess/theme-settings/markup.inc',
+      'preprocess/theme-settings/style.inc',
+      'preprocess/theme-settings/js.inc'
+    ],
+    dest: 'theme-settings.php'
+  },
+  html: {
+    options: {
+      language: {
+      // rmScript is specific to type html
+        type: 'html',
+        doctype: '<!DOCTYPE html>',
+        rmScript: true
+      }
+    },
+    src: ['process/html/**/*.html'],
+    dest: 'processed.html'
+  },
+  xml: {
+    options: {
+      language: {
+      // version, encoding, & docroot are specific to type xml
+        type: 'xml',
+        // Link to DTD
+        doctype: 'path/to/doctype',
+        // Root element of document
+        docroot: 'document',
+        version: '1.0',
+        encoding: 'UTF-8',
+      }
+    },
+    src: ['process/xml/**/*.xml'],
+    dest: 'processed.xml'
+  },
+  js: {
+    options: {
+      language: {
+      // rmLine & rmSpace are available to any language.
+        rmLine: true,
+        rmSpace: true
+      }
+    }
+  }
 });
 ```
 

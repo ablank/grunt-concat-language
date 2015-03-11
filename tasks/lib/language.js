@@ -3,67 +3,67 @@
  */
 'use strict';
 exports.init = function (grunt) {
-  // var util = require('util');
+  var util = require('util');
   var exports = {};
 
   exports.openTag = function (options) {
-    if (!options) {
-      return '';
-    }
+    var tag = '';
+
     if (options.opentag) {
-      grunt.template.process(options.opentag + '\n');
+      tag = options.opentag;
+    }
+    if (!options.opentag) {
+
+      if (options.type === 'html') {
+        tag = '<!DOCTYPE html>\n<html>\n<body>';
+      }
+
+      if (options.type === 'php') {
+        tag = '<?php';
+      }
+
+      if (options.type === 'xml') {
+        // <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+        options.version = options.version ? options.version : '1.0';
+        options.encoding = options.encoding ? options.encoding : 'UTF-8';
+        options.standalone = options.doctype ? ' ' + 'no' : 'yes';
+
+        // <!DOCTYPE root_element SYSTEM "DTD_location">
+        options.doctype = options.doctype ? ' SYSTEM "' + options.doctype + '"' : ' []';
+        options.docroot = options.docroot ? options.docroot : 'document';
+
+        tag = '<?xml version="' + options.version +
+          '" encoding="' + options.version +
+          '" standalone="' + options.standalone + '" ?>\n';
+        tag += '<!DOCTYPE ' + options.docroot + options.doctype + '>';
+      }
     }
 
-    var tag;
-
+    grunt.log.writeln('opentag: ' + util.inspect(options.opentag, false, null));
     grunt.log.writeln('Process as ' + options.type);
-
-    if (options.type === 'html') {
-      tag = '<!DOCTYPE html>\n<html>\n<body>';
-    }
-
-    if (options.type === 'php') {
-      tag = '<?php';
-    }
-
-    if (options.type === 'xml') {
-      // <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
-      options.version = options.version ? options.version : '1.0';
-      options.encoding = options.encoding ? options.encoding : 'UTF-8';
-      options.standalone = options.doctype ? ' ' + 'no' : 'yes';
-
-
-      // <!DOCTYPE root_element SYSTEM "DTD_location">
-      options.doctype = options.doctype ? options.doctype : '[]';
-      options.docroot = options.docroot ? options.docroot : 'document';
-
-      tag = '<?xml version="' + options.version +
-        '" encoding="' + options.version +
-        '" standalone="' + options.standalone + '" ?>\n' +
-        '<!DOCTYPE ' + options.docroot + ' SYSTEM "' + options.doctype + '">';
-    }
-
-    return grunt.template.process(tag + '\n');
+    return tag + '\n';
   };
 
 
   exports.closeTag = function (options) {
-    if (!options) {
-      return '';
-    }
+    var tag = '';
+
     if (options.closetag) {
-      return grunt.template.process('\n' + options.closetag);
+      tag = options.closetag;
     }
 
-    var tag;
-    if (options.type === 'html') {
-      tag = '</body>\n</html>';
-    }
-    if (options.type === 'php' && options.closetag === true) {
-      tag = '?>\n';
+    if (!options.closetag) {
+
+      if (options.type === 'html') {
+        tag = '</body>\n</html>';
+      }
+      if (options.type === 'php' && options.closetag === true) {
+        tag = '?>\n';
+      }
     }
 
-    return grunt.template.process('\n' + tag);
+    grunt.log.writeln('closetag: ' + util.inspect(options.closetag, false, null));
+    return '\n' + tag;
   };
 
   exports.format = function (filepath, src, options) {
@@ -87,10 +87,8 @@ exports.init = function (grunt) {
         if (options.rmClose === true) {
           nichts.push('(\\s\\?\\>)');
         }
-        // Format docblock comments
-        src = src.replace(/^\/\*\*\s{2,}\W\s\@file/gm, '/*\n * @see file: ' + filepath)
-          .replace(/\@return/g, '\@return')
-          .replace(/\@param/g, '\@param');
+        // Replace docblock file comments
+        src = src.replace(/^\/\*\*\s{2,}\W\s\@file/gm, '/*\n * @see file: ' + filepath);
       }
       if (options.type === 'xml') {
         // <?xml?>
@@ -103,7 +101,7 @@ exports.init = function (grunt) {
       src = src.replace(/([\r\n])+/gm, '\n');
     }
     if (options.rmSpace === true) {
-      nichts.push('((^\\s+)|(\\s+$))|(\\s{2,})');
+      nichts.push('((^\\s+)|(\\s+$))');
       src = src.replace(/ +/g, ' ');
     }
 
