@@ -15,7 +15,8 @@ exports.init = function (grunt) {
     if (!options.opentag) {
 
       if (options.type === 'html') {
-        tag = '<!DOCTYPE html>\n<html>\n<body>';
+        var doctype = options.doctype ? options.doctype : '<!DOCTYPE html>';
+        tag = '\n' + doctype + '<html>\n<body>';
       }
 
       if (options.type === 'php') {
@@ -38,10 +39,13 @@ exports.init = function (grunt) {
         tag += '<!DOCTYPE ' + options.docroot + options.doctype + '>';
       }
     }
+    if (tag !== '') {
+      tag = tag + '\n';
+    }
 
     grunt.log.writeln('opentag: ' + util.inspect(options.opentag, false, null));
     grunt.log.writeln('Process as ' + options.type);
-    return tag + '\n';
+    return tag;
   };
 
 
@@ -61,9 +65,12 @@ exports.init = function (grunt) {
         tag = '?>\n';
       }
     }
+    if (tag !== '') {
+      tag = '\n' + tag;
+    }
 
     grunt.log.writeln('closetag: ' + util.inspect(options.closetag, false, null));
-    return '\n' + tag;
+    return tag;
   };
 
   exports.format = function (filepath, src, options) {
@@ -84,7 +91,7 @@ exports.init = function (grunt) {
       if (options.type === 'php') {
         // <?php ?>
         nichts.push('(\\<\\?php\\s)');
-        if (options.rmClose === true) {
+        if (options.rmClose !== false) {
           nichts.push('(\\s\\?\\>)');
         }
         // Replace docblock file comments
@@ -106,7 +113,7 @@ exports.init = function (grunt) {
     }
 
     // Flatten array to single regex & remove content
-    src = src.replace(new RegExp('(?:' + nichts.join('|') + ')', 'ig'), '');
+    src = src.replace(new RegExp('(?:' + nichts.join('|') + ')', 'igm'), '');
 
     // grunt.log.writeln(util.inspect(renix, false, null));
     return src;

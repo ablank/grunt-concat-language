@@ -149,7 +149,9 @@ Define language type: the type is used to search & replace tags specific to the 
 Type: `String`  
 Default: `<!DOCTYPE html>`, `[]`
 
-Doctype declaration of language.type `html` & `xml`. In XML files, this attribute sets the correct SYSTEM & `standalone` attributes automatically.
+Doctype declaration of language.type `html` & `xml`, this variable is part of `language.opentag` and will be overridden if `language.opentag` is specified.
+
+In XML files, this attribute sets the correct SYSTEM & `standalone` attributes automatically.
 
 #### language.rmScript
 Type: `Boolean`  
@@ -370,11 +372,17 @@ grunt.initConfig({
   js: {
     options: {
       language: {
-      // rmLine & rmSpace are available to any language.
+      // These options are available to any language.
         rmLine: true,
-        rmSpace: true
+        rmSpace: true,
+        // Displays before banner
+        opentag: '// I'm opening the document now',
+        // Displays after footer
+        closetag: '// That's all, folks!'
       }
-    }
+    },
+    src: ['process/js/**/*.js'],
+    dest: 'processed.js'
   }
 });
 ```
