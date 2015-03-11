@@ -98,6 +98,71 @@ Default: `embed`
 
 Determines the type of source map that is generated. The default value, `embed`, places the content of the sources directly into the map. `link` will reference the original sources in the map as links. `inline` will store the entire map as a data URI in the destination file.
 
+#### language
+Type: `Object`
+Default: `false`
+
+Wrapper object for language options.
+
+#### language.rmLine
+
+#### language.rmSpace
+
+#### language.type
+
+
+#### rmLine
+
+
+```js
+    js: {
+    options: {
+      language: {
+        rmLine: true,
+        rmSpace: true
+      }
+      }
+    }.
+    php: {
+    options: {
+      language: {
+        type: 'php',
+        rmSpace: true,
+        rmLine: true,
+        rmClose: true
+      }
+    },
+    src: [
+      'preprocess/theme-settings/markup.inc',
+      'preprocess/theme-settings/style.inc',
+      'preprocess/theme-settings/js.inc',
+    ],
+    dest: 'theme-settings.php'
+  },
+  html: {
+    options: {
+      language: {
+        type: 'html',
+        rmScript: true
+      }
+    },
+    src: ['process/html/**/*.html'],
+    dest: 'processed.html'
+  },
+  xml: {
+    options: {
+      language: {
+        type: 'xml',
+        version: '1.0',
+        standalone: 'no',
+      }
+    },
+    src: ['process/xml/**/*.xml'],
+    dest: 'processed.xml'
+  }
+});
+```
+
 ### Usage Examples
 
 #### Concatenating with a custom separator
