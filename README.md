@@ -121,17 +121,11 @@ Default: empty string
 
 Tag used to close document.
 
-#### language.rmLine
-Type: `Boolean`  
-Default: null
-
-Remove empty lines > 1
-
 #### language.rmSpace
 Type: `Boolean`  
 Default: null
 
-Remove spaces > 1
+Remove spaces & empty lines > 1
 
 #### language.type
 Type: `String`  
@@ -151,13 +145,19 @@ Default: `<!DOCTYPE html>`, `[]`
 
 Doctype declaration of language.type `html` & `xml`, this variable is part of `language.opentag` and will be overridden if `language.opentag` is specified.
 
-In XML files, this attribute sets the correct SYSTEM & `standalone` attributes automatically.
+In XML files, this attribute sets the correct `standalone` & `SYSTEM` attributes automatically.
 
 #### language.rmScript
 Type: `Boolean`  
 Default: null
 
 Remove `<script>...</script>` from `language.type html`
+
+#### language.expand
+Type: `Boolean`  
+Default: null
+
+Create a line break at each closing brace '>'.
 
 #### language.rmClose
 Type: `Boolean`  
@@ -321,7 +321,7 @@ grunt.initConfig({
 
 #### Working with Multiple Languages
 
-This example shows the language options available to format compiled documents and demonstrates how to combine files ordered by an array or sequentially from a specified directory.
+This example demonstrates configuration for combining files with language options, both explicitly ordering files in an array and loading all files from a specified directory.
 
 ```js
 // Project configuration.
@@ -329,12 +329,13 @@ grunt.initConfig({
   php: {
     options: {
       language: {
-      // rmClose is specific to type php
         type: 'php',
+        // rmClose is specific to type php.
         rmClose: true
       }
     },
     src: [
+      // Specify files in order to include them.
       'preprocess/theme-settings/markup.inc',
       'preprocess/theme-settings/style.inc',
       'preprocess/theme-settings/js.inc'
@@ -344,9 +345,10 @@ grunt.initConfig({
   html: {
     options: {
       language: {
-      // rmScript is specific to type html
         type: 'html',
         doctype: '<!DOCTYPE html>',
+        expand: true,
+        // rmScript is specific to type html
         rmScript: true
       }
     },
@@ -358,12 +360,13 @@ grunt.initConfig({
       language: {
       // version, encoding, & docroot are specific to type xml
         type: 'xml',
+        version: '1.0',
+        encoding: 'UTF-8',
         // Link to DTD
         doctype: 'path/to/doctype',
         // Root element of document
         docroot: 'document',
-        version: '1.0',
-        encoding: 'UTF-8',
+        expand: true,
       }
     },
     src: ['process/xml/**/*.xml'],
@@ -373,7 +376,6 @@ grunt.initConfig({
     options: {
       language: {
       // These options are available to any language.
-        rmLine: true,
         rmSpace: true,
         // Displays before banner
         opentag: '// I'm opening the document now',

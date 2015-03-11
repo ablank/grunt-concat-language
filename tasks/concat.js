@@ -11,11 +11,12 @@
 module.exports = function (grunt) {
   // Node Modules
   var chalk = require('chalk');
+  var util = require('util');
   // Internal lib.
   var comment = require('./lib/comment').init(grunt);
   var sourcemap = require('./lib/sourcemap').init(grunt);
   var language = require('./lib/language').init(grunt);
-  
+
 
   grunt.registerMultiTask('concat', 'Concatenate files.', function () {
     // Merge task-specific and/or target-specific options with these defaults.
@@ -43,6 +44,8 @@ module.exports = function (grunt) {
     var opentag = grunt.template.process(language.openTag(options.language));
     var closetag = grunt.template.process(language.closeTag(options.language));
 
+grunt.log.writeln(util.inspect(opentag, false, null));
+
     // Process banner and footer.
     var banner = grunt.template.process(options.banner);
     var footer = grunt.template.process(options.footer);
@@ -52,7 +55,8 @@ module.exports = function (grunt) {
 
     // If content is not embedded and it will be modified, either exit or do
     // not make the source map.
-    if (sourceMap && options.sourceMapStyle === 'link' &&
+    if (
+      sourceMap && options.sourceMapStyle === 'link' &&
       (options.stripBanners || options.process)
       ) {
       // Warn and exit if --force isn't set.
@@ -107,7 +111,7 @@ module.exports = function (grunt) {
             sourceMapHelper.add(options.separator);
           }
         }
-        // Language formatting.
+        // Language formatting
         if (options.language) {
           src = language.format(filepath, src, options.language);
         }

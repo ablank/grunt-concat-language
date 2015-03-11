@@ -1,9 +1,15 @@
 /**
+ * @file
+ * Language formatting & selective content inclusion.
+ *
  * @author Adam Blankenship
+ * @copyright 2015 Adam Blankenship
+ * @license MIT License
  */
+
 'use strict';
 exports.init = function (grunt) {
-  var util = require('util');
+  // var util = require('util');
   var exports = {};
 
   exports.openTag = function (options) {
@@ -43,8 +49,8 @@ exports.init = function (grunt) {
       tag = tag + '\n';
     }
 
-    grunt.log.writeln('opentag: ' + util.inspect(options.opentag, false, null));
     grunt.log.writeln('Process as ' + options.type);
+
     return tag;
   };
 
@@ -69,7 +75,6 @@ exports.init = function (grunt) {
       tag = '\n' + tag;
     }
 
-    grunt.log.writeln('closetag: ' + util.inspect(options.closetag, false, null));
     return tag;
   };
 
@@ -104,12 +109,13 @@ exports.init = function (grunt) {
       }
     }
 
-    if (options.rmLine === true) {
-      src = src.replace(/([\r\n])+/gm, '\n');
+    if (options.expand === true) {
+      src = src.replace(/\>+/g, '\>\n');
     }
     if (options.rmSpace === true) {
+      src = src.replace(/([\r\n])+/gm, '\n');
+      //src = src.replace(/ {2,}/g, ' ');
       nichts.push('((^\\s+)|(\\s+$))');
-      src = src.replace(/ +/g, ' ');
     }
 
     // Flatten array to single regex & remove content
