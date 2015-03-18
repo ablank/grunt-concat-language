@@ -44,8 +44,6 @@ module.exports = function (grunt) {
     var opentag = grunt.template.process(language.openTag(options.language));
     var closetag = grunt.template.process(language.closeTag(options.language));
 
-grunt.log.writeln(util.inspect(opentag, false, null));
-
     // Process banner and footer.
     var banner = grunt.template.process(options.banner);
     var footer = grunt.template.process(options.footer);
