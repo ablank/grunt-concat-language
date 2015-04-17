@@ -4,7 +4,7 @@
  *
  * @author Adam Blankenship
  * @copyright 2015 Adam Blankenship
- * @license MIT License
+ * @license GPL2 License
  */
 
 'use strict';

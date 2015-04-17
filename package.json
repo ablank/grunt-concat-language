@@ -1,12 +1,13 @@
 {
-  "name": "grunt-contrib-concat",
-  "description": "Concatenate files.",
-  "version": "0.5.1",
+  "name": "grunt-concat-language",
+  "description": "Concatenate files, with specific support for combining php, html, & xml documents.",
+  "version": "0.0.0",
   "author": {
-    "name": "Grunt Team",
-    "url": "http://gruntjs.com/"
+    "name": "Adam Blankenship",
+    "email": "i.adambear@gmail.com",
+    "url": "github.com/ablank/"
   },
-  "repository": "gruntjs/grunt-contrib-concat",
+  "repository": "github.com/ablank/grunt-concat-language",
   "licenses": [
     {
       "type": "MIT",
