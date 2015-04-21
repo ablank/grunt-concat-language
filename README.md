@@ -10,13 +10,13 @@ This plugin requires Grunt `>=0.4.0`
 If you haven't used [Grunt](http://gruntjs.com/) before, be sure to check out the [Getting Started](http://gruntjs.com/getting-started) guide, as it explains how to create a [Gruntfile](http://gruntjs.com/sample-gruntfile) as well as install and use Grunt plugins. Once you're familiar with that process, you may install this plugin with this command:
 
 ```shell
-npm install grunt-contrib-concat --save-dev
+npm install grunt-concat-language --save-dev
 ```
 
 Once the plugin has been installed, it may be enabled inside your Gruntfile with this line of JavaScript:
 
 ```js
-grunt.loadNpmTasks('grunt-contrib-concat');
+grunt.loadNpmTasks('grunt-concat-language');
 ```
 
 
@@ -330,12 +330,12 @@ grunt.initConfig({
     options: {
       language: {
         type: 'php',
-        // rmClose is specific to type php.
+        // rmClose is specific to type: php.
         rmClose: true
       }
     },
     src: [
-      // Specify files in order to include them.
+      // Specify files in the order they will be included.
       'preprocess/theme-settings/markup.inc',
       'preprocess/theme-settings/style.inc',
       'preprocess/theme-settings/js.inc'
