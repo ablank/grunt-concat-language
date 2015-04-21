@@ -327,12 +327,12 @@ grunt.initConfig({
     options: {
       language: {
         type: 'php',
-        // rmClose is specific to type php.
+        // rmClose is specific to type: php.
         rmClose: true
       }
     },
     src: [
-      // Specify files in order to include them.
+      // Specify files in the order they will be included.
       'preprocess/theme-settings/markup.inc',
       'preprocess/theme-settings/style.inc',
       'preprocess/theme-settings/js.inc'
