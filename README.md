@@ -1,6 +1,6 @@
-# grunt-contrib-concat v0.5.1 [![Build Status: Linux](https://travis-ci.org/gruntjs/grunt-contrib-concat.svg?branch=master)](https://travis-ci.org/gruntjs/grunt-contrib-concat) [![Build Status: Windows](https://ci.appveyor.com/api/projects/status/l42173901ms416km/branch/master?svg=true)](https://ci.appveyor.com/project/gruntjs/grunt-contrib-concat/branch/master)
+# grunt-concat-language
 
-> Concatenate files.
+> Concatenate files, with support for combining php, html, and xml partials.
 
 
 
@@ -10,17 +10,14 @@ This plugin requires Grunt `>=0.4.0`
 If you haven't used [Grunt](http://gruntjs.com/) before, be sure to check out the [Getting Started](http://gruntjs.com/getting-started) guide, as it explains how to create a [Gruntfile](http://gruntjs.com/sample-gruntfile) as well as install and use Grunt plugins. Once you're familiar with that process, you may install this plugin with this command:
 
 ```shell
-npm install grunt-contrib-concat --save-dev
+npm install grunt-concat-language --save-dev
 ```
 
 Once the plugin has been installed, it may be enabled inside your Gruntfile with this line of JavaScript:
 
 ```js
-grunt.loadNpmTasks('grunt-contrib-concat');
+grunt.loadNpmTasks('grunt-concat-language');
 ```
-
-
-
 
 ## Concat task
 _Run this task with the `grunt concat` command._
@@ -330,12 +327,12 @@ grunt.initConfig({
     options: {
       language: {
         type: 'php',
-        // rmClose is specific to type php.
+        // rmClose is specific to type: php.
         rmClose: true
       }
     },
     src: [
-      // Specify files in order to include them.
+      // Specify files in the order they will be included.
       'preprocess/theme-settings/markup.inc',
       'preprocess/theme-settings/style.inc',
       'preprocess/theme-settings/js.inc'
@@ -433,22 +430,3 @@ grunt.initConfig({
 [multitask]: http://gruntjs.com/creating-tasks#multi-tasks
 
 
-## Release History
-
- * 2015-02-20   v0.5.1   Fix path issues with Source Maps on Windows.
- * 2014-07-19   v0.5.0   Adds sourceMap option.
- * 2014-03-21   v0.4.0   README updates. Output updates.
- * 2013-04-25   v0.3.0   Add option to process files with a custom function.
- * 2013-04-08   v0.2.0   Don't normalize separator to allow user to set LF even on a Windows environment.
- * 2013-02-22   v0.1.3   Support footer option.
- * 2013-02-15   v0.1.2   First official release for Grunt 0.4.0.
- * 2013-01-18   v0.1.2rc6   Updating grunt/gruntplugin dependencies to rc6. Changing in-development grunt/gruntplugin dependency versions from tilde version ranges to specific versions.
- * 2013-01-09   v0.1.2rc5   Updating to work with grunt v0.4.0rc5. Switching back to this.files api.
- * 2012-11-13   v0.1.1   Switch to this.file api internally.
- * 2012-10-03   v0.1.0   Work in progress, not yet officially released.
-
----
-
-Task submitted by ["Cowboy" Ben Alman](http://benalman.com/)
-
-*This file was generated on Fri Feb 20 2015 10:39:55.*
